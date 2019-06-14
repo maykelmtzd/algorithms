@@ -13,9 +13,9 @@ namespace algorithms
             var index2 = 0;
             var resultIndex = 0;
 
-            while(index1 < orderedArray1.Length && index2 < orderedArray2.Length)
+            while (index1 < orderedArray1.Length && index2 < orderedArray2.Length)
             {
-                if(orderedArray1[index1] <= orderedArray2[index2])
+                if (orderedArray1[index1] <= orderedArray2[index2])
                 {
                     result[resultIndex] = orderedArray1[index1];
                     index1++;
@@ -28,21 +28,51 @@ namespace algorithms
                 resultIndex++;
             }
 
-            if(index1 < orderedArray1.Length)
+            if (index1 < orderedArray1.Length)
             {
-                Enumerable.Range(index1, orderedArray1.Length - 1).ToList().ForEach(index => {
+                Enumerable.Range(index1, orderedArray1.Length - index1).ToList().ForEach(index =>
+                {
                     result[resultIndex] = orderedArray1[index];
-                    resultIndex++; 
+                    resultIndex++;
                 });
             }
-            else 
+            else
             {
-                Enumerable.Range(index2, orderedArray2.Length - 1).ToList().ForEach(index => {
+                Enumerable.Range(index2, orderedArray2.Length - index2).ToList().ForEach(index =>
+                {
                     result[resultIndex] = orderedArray2[index];
-                    resultIndex++; 
+                    resultIndex++;
                 });
             }
 
+            return result;
+        }
+
+        public static int[] Order(int[] array)
+        {
+            if (array.Length == 1)
+                return array;
+
+            var midIndex = array.Length / 2;
+            var leftArray = CreateArray(array, 0, midIndex - 1);
+            var rightArray = CreateArray(array, midIndex, array.Length - 1);
+
+            var leftOrderedArray = Order(leftArray);
+            var rightOrderedArray = Order(rightArray);
+
+            return Merge(leftOrderedArray, rightOrderedArray);
+        }
+
+        private static int[] CreateArray(int[] array, int leftIndex, int rightIndex)
+        {
+            var resultLegth = rightIndex - leftIndex + 1;
+            var result = new int[resultLegth];
+            // Enumerable.Range(leftIndex, resultLegth).ToList().ForEach(index => result[index] = array[index]);
+            for (int i = 0; i < result.Length; i++)
+            {
+                result[i] = array[leftIndex];
+                leftIndex++;
+            }
             return result;
         }
     }
